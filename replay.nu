@@ -15,8 +15,12 @@ export def --env main [
   # level of the function.
   let exit_code = if ($new_env | describe) == 'int' { $new_env } else { 0 }
   let new_env = if ($new_env | describe) == 'int' { {} } else { $new_env }
+  let filtered_env = $new_env | reject PWD
+  if ('PWD' in $new_env) {
+    cd ($new_env.PWD)
+  }
 
-  $new_env | load-env
+  $filtered_env | load-env
   cat ($output)
   rm $output
   return $exit_code
